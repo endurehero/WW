@@ -1,0 +1,30 @@
+#ifndef WW_CONFIG_HEADER_GUARD_H
+#define WW_CONFIG_HEADER_GUARD_H
+
+#define WW_VERSION @VERSION@
+
+// data float precision
+#cmakedefine WW_TYPE_FP64
+#cmakedefine WW_TYPE_FP32
+#cmakedefine WW_TYPE_FP16
+#cmakedefine WW_TYPE_INT8
+
+
+//build options
+#cmakedefine ENABLE_DEBUG
+#cmakedefine USE_CUDA
+#cmakedefine USE_X86
+#cmakedefine USE_HIP
+#cmakedefine USE_OCL
+
+//device to use 
+#cmakedefine USE_CPU
+#cmakedefine USE_GPU
+
+//cuda libs use
+#cmakedefine USE_CUBLAS
+#cmakedefine USE_CURAND
+#cmakedefine USE_CUFFT
+#cmakedefine USE_CUDNN
+
+#endif

@@ -1,0 +1,4 @@
+if(USE_CUDA)
+    wwFetchFilesWithSuffix(${CUDA_BASE_CODE_ROOT} "cu" WW_SABER_CUDA_C_SRC)
+    set(WW_SABER_CUDA_C_SRC ${WW_SABER_CUDA_C_SRC} PARENT_SCOPE)
+endif()

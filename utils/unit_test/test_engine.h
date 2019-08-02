@@ -8,7 +8,10 @@
 #include <stdio.h>
 
 #include "test_base.h"
-#include "../common.h"
+#include "utils/timer.hpp"
+#include "abacus/abacus_type.h"
+#include "abacus/core/context.hpp"
+#include "abacus/core/env.hpp"
 
 namespace WW{
 
@@ -18,7 +21,7 @@ namespace test{
 class EngineRepo{
 public:
     static EngineRepo& getInstance(){
-        static EngineRepo ins = EngineRepo();
+        static EngineRepo ins;
         return ins;
     }
     
@@ -55,6 +58,7 @@ public:
     EngineRepoOp& operator & (const std::function<void(void)>& test_func){
         EngineRepo& engine = EngineRepo::getInstance();
         engine._map_class2func[_class].emplace_back(test_func);
+        return *this;
     }
     
 private:
@@ -68,7 +72,7 @@ class EngineTest{
 public:
 
     static EngineTest& getInstance(){
-        static EngineTest ins = EngineTest();
+        static EngineTest ins;
         return ins;
     }
 
@@ -113,7 +117,10 @@ public:
                         ::WW::config::green(),::WW::config::reset(),
                         class_name.c_str(),func_name_list[i].c_str());
                 
-                HostTimer timer;
+                // apply resource for host timer.
+                ::WW::abacus::Env<::WW::abacus::X86>::envInit();
+                ::WW::abacus::Context<::WW::abacus::X86> ctx;
+                Timer<::WW::abacus::X86> timer(ctx);
                 timer.start();
                 std::function<void(void)> test_func = engine._map_class2func[engine._map_classname2class[class_name]][i];
                 test_func();

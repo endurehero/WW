@@ -34,7 +34,6 @@ namespace config{
     inline const char* reset()     { return isColorTerminal ? "\e[0m" : "";}
     inline const char* bold()      { return isColorTerminal ? "\e[1m" : "";}
     inline const char* dim()       { return isColorTerminal ? "\e[2m" : "";}
-    inline const char* bold()      { return isColorTerminal ? "\e[3m" : "";}
     inline const char* underline() { return isColorTerminal ? "\e[4m" : "";}
     inline const char* blink()     { return isColorTerminal ? "\e[5m" : "";}
 
