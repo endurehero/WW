@@ -3,7 +3,7 @@
 namespace WW{
 namespace abacus{
 
-
+#ifdef USE_X86
 static const int MALLOC_ALIGN = 64;
 
 
@@ -89,5 +89,6 @@ int X86_API::getDeviceId(){
 
 void X86_API::deviceSync(){}
 
+#endif
 }// namespace abacus
 }// namespace WW

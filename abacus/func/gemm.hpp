@@ -17,6 +17,10 @@
 #include "abacus/func/impl/x86/abacus_gemm.h"
 #endif
 
+#ifdef USE_HIP
+#include "abacus/func/impl/hip/abacus_gemm.h"
+#endif
+
 namespace WW{
 namespace abacus{
 

@@ -23,7 +23,7 @@ typedef enum{
 template <typename TargetType>
 class Timer final{
 public:
-    Timer(const abacus::Context<TargetType>& ctx)
+    Timer()
         :_precision(MILLI_SECONDS){}
     
     explicit Timer(TIME_PRECISION p)
@@ -92,21 +92,21 @@ private:
 
 #ifdef USE_CUDA
 template<>
-class Timer<NV> final{
+class Timer<abacus::NV> final{
 public:
-    typedef abacus::TargetWrapper<NV> API;
+    typedef abacus::TargetWrapper<abacus::NV> API;
     
-    explicit Timer(const abacus::Context<NV>& ctx)
+    explicit Timer(const abacus::Context<abacus::NV>& ctx)
         :_precision(MILLI_SECONDS),
-         _ctx(std::make_shared<abacus::Context<NV>>(ctx)){
+         _ctx(std::make_shared<abacus::Context<abacus::NV>>(ctx)){
 
         API::createEvent(&_start);
         API::createEvent(&_end);
     }
     
-    Timer(TIME_PRECISION p, const abacus::Context<NV>& ctx)
+    Timer(TIME_PRECISION p, const abacus::Context<abacus::NV>& ctx)
         :_precision(p),
-         _ctx(std::make_shared<abacus::Context<NV>>(ctx)){
+         _ctx(std::make_shared<abacus::Context<abacus::NV>>(ctx)){
         
         API::createEvent(&_start);
         API::createEvent(&_end);  
@@ -164,10 +164,87 @@ private:
     typename API::event_t _start;
     typename API::event_t _end;
     std::list<double> _time_intervals;
-    std::shared_ptr<abacus::Context<NV>> _ctx;
+    std::shared_ptr<abacus::Context<abacus::NV>> _ctx;
 
 };
 #endif // USE_CUDA
+
+
+#ifdef USE_HIP
+template<>
+class Timer<abacus::AMD_HIP> final{
+public:
+    typedef abacus::TargetWrapper<abacus::AMD_HIP> API;
+    
+    explicit Timer(const abacus::Context<abacus::AMD_HIP>& ctx)
+        :_precision(MILLI_SECONDS),
+         _ctx(std::make_shared<abacus::Context<abacus::AMD_HIP>>(ctx)){
+
+        API::createEvent(&_start);
+        API::createEvent(&_end);
+    }
+    
+    Timer(TIME_PRECISION p, const abacus::Context<abacus::AMD_HIP>& ctx)
+        :_precision(p),
+         _ctx(std::make_shared<abacus::Context<abacus::AMD_HIP>>(ctx)){
+        
+        API::createEvent(&_start);
+        API::createEvent(&_end);  
+    }
+
+
+    ~Timer(){
+        API::destoryEvent(_start);
+        API::destoryEvent(_end);
+    }
+
+    void start(){
+        typename API::stream_t stream;
+        stream = _ctx->getComputeStream();
+        API::recordEvent(_start, stream);
+    }
+    
+    void end(){
+        typename API::stream_t stream;
+        stream = _ctx->getComputeStream();
+        API::recordEvent(_end, stream);
+        API::syncEvent(_end);
+        _time_intervals.push_back(elapsed());
+    }
+    
+    double elapsed(){
+        return API::elapseMS(_start, _end);
+    }
+
+    void clear(){
+        _time_intervals.clear();
+    }
+
+    const std::list<double>& getIntervals() const{
+        return _time_intervals;
+    }
+
+    double getAvgElapsed() const{
+        double ans = 0.0;
+        if(_time_intervals.empty()) return ans;
+        
+        for(auto t : _time_intervals){
+            ans += t;
+        }
+
+        ans /= _time_intervals.size();
+        return ans;
+    }
+
+private:
+    TIME_PRECISION _precision;
+    typename API::event_t _start;
+    typename API::event_t _end;
+    std::list<double> _time_intervals;
+    std::shared_ptr<abacus::Context<abacus::AMD_HIP>> _ctx;
+
+};
+#endif // USE_HIP
 
 } // namespace WW
 #endif

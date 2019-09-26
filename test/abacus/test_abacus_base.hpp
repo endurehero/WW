@@ -99,8 +99,8 @@ public:
     
     
 private:
-    TEST_DATA_TYPE _input_type;
-    OpDataType _special_value;
+    TEST_DATA_TYPE _input_type{RANDOM};
+    OpDataType _special_value{0};
     float _max_val{1.0};
     float _min_val{-1.0};
 

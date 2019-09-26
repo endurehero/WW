@@ -83,7 +83,15 @@ include_directories(${PROJECT_BINARY_DIR})
 if(USE_CUDA)
     include(cmake/cuda.cmake)
 endif()
+
+if(USE_HIP)
+    include(cmake/hip.cmake)
+endif()
 include(cmake/compiler_options.cmake)
+
+# use cblas
+include(cmake/altas.cmake)
+include_directories(${ATLAS_INCLUDE_DIR})
 
 #-----------------------------------------------
 # section: build and install ww

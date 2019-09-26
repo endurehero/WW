@@ -10,9 +10,6 @@
 namespace WW{
 namespace abacus{
 
-
-using namespace std;
-
 const float eps = 1e-06;
 const int print_line_width = 8;
 

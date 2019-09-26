@@ -117,10 +117,7 @@ public:
                         ::WW::config::green(),::WW::config::reset(),
                         class_name.c_str(),func_name_list[i].c_str());
                 
-                // apply resource for host timer.
-                ::WW::abacus::Env<::WW::abacus::X86>::envInit();
-                ::WW::abacus::Context<::WW::abacus::X86> ctx;
-                Timer<::WW::abacus::X86> timer(ctx);
+                Timer<::WW::abacus::X86> timer;
                 timer.start();
                 std::function<void(void)> test_func = engine._map_class2func[engine._map_classname2class[class_name]][i];
                 test_func();

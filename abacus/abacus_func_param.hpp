@@ -15,14 +15,15 @@ struct GemmParam{
               int lda = 0,
               int ldb = 0,
               int ldc = 0,
+              int ldd = 0,
               DataType alpha = 0.0,
               DataType beta  = 0.0)
               : _transpose_x(transA),
                 _transpose_y(transB),
                 _m(m), _n(n), _k(k),
                 _lda(lda), _ldb(ldb),
-                _ldc(ldc), _alpha(alpha),
-                _beta(beta){}
+                _ldc(ldc), _ldd(ldd),
+                _alpha(alpha), _beta(beta){}
     
     GemmParam<TargetType, DataType>& operator= (const GemmParam<TargetType, DataType>& rhs){
         if(this == &rhs) return *this;
@@ -33,6 +34,7 @@ struct GemmParam{
         this->_lda = rhs._lda;
         this->_ldb = rhs._ldb;
         this->_ldc = rhs._ldc;
+        this->_ldd = rhs._ldd;
         this->_transpose_x = rhs._transpose_x;
         this->_transpose_y = rhs._transpose_y;
         this->_alpha = rhs._alpha;
@@ -48,6 +50,7 @@ struct GemmParam{
            this->_lda == rhs._lda &&
            this->_ldb == rhs._ldb &&
            this->_ldc == rhs._ldc &&
+           this->_ldd == rhs._ldd &&
            this->_transpose_x == rhs._transpose_x &&
            this->_transpose_y == rhs._transpose_y &&
            this->_alpha == rhs._alpha &&
@@ -64,6 +67,7 @@ struct GemmParam{
     int _lda{0};
     int _ldb{0};
     int _ldc{0};
+    int _ldd{0};
 
     DataType _alpha{0.0};
     DataType _beta{0.0};

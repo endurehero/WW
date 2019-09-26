@@ -3,6 +3,7 @@
 
 #include "abacus/core/data_traits.h"
 #include "abacus/core/target_traits.h"
+#include "abacus/core/common.h"
 #include "ww_config.h"
 
 namespace WW{
@@ -36,6 +37,8 @@ public:
     static void deviceSync()                                           {LOG(ERROR) << "Unimplemented yet!";}
 };
 
+
+#ifdef USE_X86
 template<>
 class TargetWrapper<X86>{
 public:
@@ -72,6 +75,7 @@ public:
     static int getDeviceId();
     static void deviceSync();
 };
+#endif
 
 #ifdef USE_CUDA
 template<>
@@ -248,6 +252,8 @@ public:
         size_t count, stream_t stream);
     static int getDeviceId();
     static void deviceSync();
+
+    static double elapseMS(event_t start, event_t end);
 };
 #endif //USE_HIP
 

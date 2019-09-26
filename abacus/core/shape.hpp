@@ -157,7 +157,7 @@ public:
         if(start < 0) start = 0;
         if(end > dims()) end = dims();
         
-        long long sum = 0;
+        long long sum = 1;
         std::for_each(_shape.begin() + start, _shape.begin() + end, [&](int n){
             sum *= n;
         });

@@ -5,6 +5,26 @@
 #include "abacus/abacus_type.h"
 #include "ww_config.h"
 
+#ifdef USE_CUDA
+#include<cuda_runtime.h>
+
+#define CUDA_CHECK(condition)\
+    do{\
+        cudaError_t err = condition;\
+        CHECK_EQ(err, cudaSuccess) << " " << cudaGetErrorString(err);\
+    } while(0)
+#endif // USE_CUDA
+
+#ifdef USE_HIP
+#include <hip/hip_runtime.h>
+
+#define HIP_CHECK(condition)\
+    do{\
+        hipError_t err = condition;\
+        CHECK_EQ(err, hipSuccess) << " " << hipGetErrorString(err);\
+    } while(0)
+#endif // USE_HIP
+
 namespace WW{
 namespace abacus{
 
@@ -49,16 +69,8 @@ struct IFELSE<false, ThenType, ElseType>{
     } while(0)
 
 
-#ifdef USE_CUDA
-#include<cuda_runtime.h>
 
 
-#define CUDA_CHECK(condition)\
-    do{\
-        cudaError_t err = condition;\
-        CHECK_EQ(err, cudaSuccess) << " " << cudaGetErrorString(err);\
-    } while(0)
-#endif // USE_CUDA
 }//namespace abacus    
 }//namespace WW
 #endif

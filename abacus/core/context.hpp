@@ -115,6 +115,7 @@ public:
         if(this == &rhs) return *this;
         
         this->_device_id = rhs._device_id;
+        return *this;
     }
 
     bool operator == (const Context<X86>& rhs){
